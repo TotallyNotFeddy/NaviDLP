@@ -21,8 +21,6 @@ def proxy(endpoint): #defines proxy
     )
     return Response(resp.content, status=resp.status_code, content_type=resp.headers.get("content-type"))
 
-if __name__ == "__main__":
-    app.run(port=6969) # heheheh port name (for listening)
 
 #search function
 @app.route("/rest/search3")
@@ -131,3 +129,5 @@ def catch_all(path):
         stream=True
     )
     return Response(resp.content, status=resp.status_code, content_type=resp.headers.get("content-type"))
+if __name__ == "__main__":
+     app.run(port=6969)
