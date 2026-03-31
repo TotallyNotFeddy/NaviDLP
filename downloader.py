@@ -1,6 +1,8 @@
 # musich grabber systemes
 
 # idle system 
+import subprocess
+import json
 from flask import Flask, request, Response
 import requests
 
@@ -116,3 +118,16 @@ def download():
                            params=request.args, stream=True)
         return Response(resp.iter_content(chunk_size=1024),
                        content_type=resp.headers.get("content-type"))
+                       
+# catch all or smth, go claude go
+@app.route("/", defaults={"path": ""}, methods=["GET", "POST"])
+@app.route("/<path:path>", methods=["GET", "POST"])
+def catch_all(path):
+    resp = requests.request(
+        method=request.method,
+        url=f"{NAVIDROME}/{path}",
+        params=request.args,
+        headers={key: val for key, val in request.headers if key != "Host"},
+        stream=True
+    )
+    return Response(resp.content, status=resp.status_code, content_type=resp.headers.get("content-type"))
