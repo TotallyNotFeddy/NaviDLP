@@ -23,7 +23,7 @@ def proxy(endpoint): #defines proxy
 
 
 #search function
-@app.route("/rest/search3")
+@app.route("/rest/search3.view")
 def search():
     # grab the search query that substreamer sent
     query = request.args.get("query") # defines what query is
