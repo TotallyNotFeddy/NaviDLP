@@ -177,8 +177,8 @@ snprintf(streamreply, sizeof(streamreply),"http://localhost:4533/rest/stream.vie
 	if(strncmp(id,"YT-",3)!=0){
 		struct membuf availstream = {0};
 			CURL *availstreamer = curl_easy_init();
-    		curl_easy_setopt(finalsender,CURLOPT_WRITEFUNCTION,writecb);
-    		curl_easy_setopt(finalsender,CURLOPT_WRITEDATA,&availstream);
+    		curl_easy_setopt(availstreamer,CURLOPT_WRITEFUNCTION,writecb);
+    		curl_easy_setopt(availstreamer,CURLOPT_WRITEDATA,&availstream);
 			curl_easy_setopt(availstreamer,CURLOPT_URL,streamreply);
 			curl_easy_perform(availstreamer);
 			curl_easy_cleanup(availstreamer);
@@ -226,8 +226,7 @@ CURL *navisearchs = curl_easy_init();
 	curl_easy_setopt(navisearchs,CURLOPT_URL,finalresults);
 	curl_easy_perform(navisearchs);
 	curl_easy_cleanup(navisearchs);
-	free(naviresp.data)
-	if(getid==NULL) return MHD_NO;
+	free(naviresp.data);
 
 // BUILD THE STREAM RESPONSE
 	cJSON *getid = cJSON_Parse(naviresp.data);
@@ -237,7 +236,8 @@ CURL *navisearchs = curl_easy_init();
 	cJSON *firstsong = cJSON_GetArrayItem(songarray, 0);
 	cJSON *NVID = cJSON_GetObjectItem(firstsong, "id");
 	if(subres==NULL || searchresult==NULL || songarray==NULL || firstsong==NULL || NVID==NULL) return MHD_NO;
-
+    if(getid==NULL) return MHD_NO;
+    
 // CALL NAVIDROME TO STREAM
 char finalstream [1337];
 snprintf(finalstream, sizeof(finalstream),"http://localhost:4533/rest/stream.view?id=%s&u=%s&t=%s&s=%s&c=%s&v=%s&maxBitRate=128&format=mp3",NVID->valuestring,user,token,salt,clientname,apiversion);
